@@ -1,279 +1,152 @@
-# Brawl Stars Draft Assistant - Telegram Bot
+# Brawl Stars Draft Assistant Bot
 
-A professional-grade Brawl Stars drafting assistant that provides real-time pick and ban recommendations for Ranked, Scrims, and Competitive play.
+A production-ready Telegram bot providing real-time draft recommendations for Brawl Stars competitive play. The system uses advanced competitive analysis, machine learning predictions, and multi-factor scoring to deliver high-quality draft guidance.
 
 ## Features
 
-- 🎯 **Multi-Factor Draft Engine** - Analyzes 9 different factors for optimal recommendations
-- 📊 **Real-Time Meta Analysis** - Automatically updates from competitive data
-- 🤖 **Telegram Bot Interface** - Easy-to-use inline button controls
-- 💾 **Persistent Database** - SQLite for all matchup, synergy, and meta data
-- ⚡ **Auto-Update System** - Hourly data refresh via GitHub Actions
-- 🎮 **Comprehensive Matchup Data** - Win rates, synergies, counterability, draft safety
-- 🗺️ **Map-Specific Performance** - Tailored recommendations per map
-- 🔮 **Future Pick Prediction** - AI-powered prediction of enemy picks
-- 📈 **Confidence Scoring** - Detailed explanations for every recommendation
+### Intelligent Draft Analysis
+- **Multi-factor recommendation engine** combining map performance, matchups, synergies, meta strength, and more
+- **Probabilistic draft prediction** anticipating enemy picks based on ranked history and tournament data
+- **Confidence scoring** for every recommendation
+- **Detailed reasoning** explaining the score behind each pick
+
+### Competitive Data Integration
+- Real-time data from Official Brawl Stars API
+- Professional tournament statistics from CoreStats
+- Automatic meta analysis and trend detection
+- Continuous learning from competitive matches
+
+### Telegram Bot Interface
+- Quick-start draft creation
+- Real-time pick/ban tracking
+- Inline recommendations with one-tap selections
+- Team composition analysis
+- Export draft history
+- Statistics lookup
+
+### Fully Automated System
+- Automatic data collection from all sources
+- Data normalization and validation
+- Scheduled statistics updates
+- Model retraining from recent matches
+- Zero manual intervention required
 
 ## Quick Start
 
 ### Prerequisites
-- Python 3.9+
+- Python 3.10+
+- PostgreSQL 13+
 - Telegram Bot Token
-- GitHub Account (for hosting)
+- Brawl Stars API Token (optional but recommended)
 
-### Local Setup
+### Installation
 
-1. Clone the repository
 ```bash
+# Clone the repository
 git clone https://github.com/gordonphone0701-dot/brawl-stars-draft-assistant.git
 cd brawl-stars-draft-assistant
-```
 
-2. Create virtual environment
-```bash
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 
-3. Install dependencies
-```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-4. Configure environment
-```bash
+# Set up configuration
 cp .env.example .env
-# Edit .env with your Telegram Bot Token
+# Edit .env with your credentials
+
+# Initialize database
+python -m src.database.init_db
+
+# Run the bot
+python -m src.bot.main
 ```
 
-5. Initialize database
-```bash
-python scripts/init_db.py
-```
+### Configuration
 
-6. Run the bot locally
-```bash
-python main.py
-```
-
-## Telegram Bot Commands
-
-- `/start` - Initialize draft assistant
-- `/map <map_name>` - Set current map
-- `/pick <brawler>` - Confirm pick for your team
-- `/ban <brawler>` - Confirm ban
-- `/recommend` - Get top 3 recommendations
-- `/meta` - View current meta rankings
-- `/export` - Export draft summary
-- `/reset` - Start new draft
+See `.env.example` for detailed configuration options.
 
 ## Architecture
 
 ```
-brawl-stars-draft-assistant/
-├── main.py                 # Bot entry point
-├── requirements.txt        # Python dependencies
-├── .env.example           # Environment template
-├── config.py              # Configuration settings
-│
-├── database/
-│   ├── db.py              # SQLite connection
-│   ├── models.py          # Data models
-│   └── schema.sql         # Database schema
-│
-├── bot/
-│   ├── telegram_bot.py    # Bot handlers
-│   ├── commands.py        # Command implementations
-│   └── keyboards.py       # Inline button layouts
-│
-├── draft_engine/
-│   ├── engine.py          # Core recommendation logic
-│   ├── scoring.py         # Scoring algorithm
-│   ├── factors.py         # All 9 scoring factors
-│   └── prediction.py      # Future pick prediction
-│
-├── data/
-│   ├── ranked.py          # Ranked match data provider
-│   ├── esports.py         # Esports data provider
-│   ├── maps.py            # Map rotation provider
-│   └── meta.py            # Meta strength data
-│
-├── automation/
-│   ├── updater.py         # Auto-update orchestrator
-│   └── schedulers.py      # Scheduled tasks
-│
-├── scripts/
-│   ├── init_db.py         # Database initialization
-│   └── populate_sample_data.py  # Sample data loader
-│
-├── .github/workflows/
-│   └── auto_update.yml    # GitHub Actions workflow
-│
-└── docs/
-    ├── SETUP.md           # Detailed setup guide
-    ├── ARCHITECTURE.md    # System architecture
-    ├── DATA_PROVIDERS.md  # How to connect real data
-    └── WEIGHTS.md         # Scoring weights config
-```
-
-## Draft Engine - The 9 Factors
-
-1. **Map Strength** (25%) - Brawler performance on current map
-2. **Matchup Win Rates** (25%) - Effectiveness against enemy team
-3. **Meta Strength** (15%) - Current competitive viability
-4. **Draft Safety** (15%) - Reliability as blind pick
-5. **Team Synergy** (10%) - Chemistry with existing team
-6. **Counterability** (-15%) - How easily countered
-7. **Counter Availability** (Variable) - How many counters remain
-8. **Future Pick Prediction** (5%) - Expected enemy picks
-9. **Role Composition** (Auto-balance) - Team role diversity
-
-## Scoring Algorithm
-
-```
-score = (map_strength * 0.25)
-      + (matchup_strength * 0.25)
-      + (meta_strength * 0.15)
-      + (draft_safety * 0.15)
-      + (team_synergy * 0.10)
-      + (future_prediction * 0.05)
-      + (pro_usage * 0.05)
-      - (counterability * 0.15)
-      - (counter_availability_penalty * 0.10)
-      + (role_balance_bonus)
+src/
+├── bot/                      # Telegram bot interface
+├── data/                      # Data collection layer
+├── database/                  # Database models and management
+├── analytics/                 # Statistics and analysis
+├── recommendations/           # Recommendation engine
+├── predictions/               # Prediction models
+├── utils/                     # Shared utilities
+├── config.py                  # Configuration management
+└── main.py                    # Application entry point
 ```
 
 ## Data Sources
 
-The system is designed to work with real data providers:
+1. **Official Brawl Stars API** - Player data, battle logs, leaderboards
+2. **CoreStats** - Tournament drafts, professional statistics, meta trends
+3. **Brawl Stars Wiki** - Brawler database, classifications, metadata
 
-| Module | Purpose | Status |
-|--------|---------|--------|
-| `ranked.py` | Fetch high-ranked player matches | Placeholder |
-| `esports.py` | Professional esports data | Placeholder |
-| `maps.py` | Current map rotation | Placeholder |
-| `meta.py` | Meta strength scoring | Placeholder |
+## Recommendation Algorithm
 
-See `docs/DATA_PROVIDERS.md` for integration instructions.
+The recommendation engine evaluates each brawler on 15+ factors:
 
-## Automation
+1. Map Strength
+2. Matchup Strength
+3. Synergy Strength
+4. Draft Safety
+5. Counterability
+6. Counter Availability
+7. Meta Strength
+8. Competitive Usage
+9. Ban Impact
+10. Future Draft Prediction
+11. Team Composition
+12. Draft Flexibility
+13. Historical Success
+14. Draft State Similarity
+15. Confidence Estimation
 
-The bot automatically updates every hour:
-
-1. Fetches latest competitive data
-2. Recalculates all matchup statistics
-3. Updates meta scores
-4. Refreshes synergy values
-5. Recomputes draft safety ratings
-6. Saves to database
-7. Bot immediately uses new values
-
-Powered by GitHub Actions - no external hosting required!
+Each factor is weighted dynamically based on game state and configuration.
 
 ## Deployment
 
-### Option 1: GitHub Actions (Recommended)
-- Bot runs on GitHub servers
-- Completely free
-- Auto-updates hourly
-- See `docs/SETUP.md` for details
+### GitHub Actions
 
-### Option 2: Render/Railway
-- Free tier available
-- $7/month after free tier
-- See `docs/SETUP.md` for details
+Automatic deployment on push to `main` branch.
 
-### Option 3: Self-Hosted
-- Your own server/VPS
-- Complete control
-- See `docs/SETUP.md` for details
+### Render
 
-## Configuration
-
-All configuration is in `config.py`:
-
-```python
-# Scoring weights
-WEIGHTS = {
-    'map_strength': 0.25,
-    'matchup_strength': 0.25,
-    'meta_strength': 0.15,
-    'draft_safety': 0.15,
-    'team_synergy': 0.10,
-    'future_prediction': 0.05,
-    'pro_usage': 0.05,
-    'counterability': -0.15,
-}
-
-# Update frequency
-UPDATE_INTERVAL_HOURS = 1
+```bash
+render deploy
 ```
 
-## Example Usage
+### Railway
 
-```
-User: /start
-
-Bot: 🎮 Brawl Stars Draft Assistant
-
-Map: Hard Rock Mine
-
-Blue Team:
-  Belle
-  Gus
-
-Red Team:
-  (empty)
-
-Bans:
-  Janet
-  Gene
-
-[Set Map] [Pick] [Ban] [Recommend]
-
----
-
-User: [Recommend]
-
-Bot: Top Recommendations:
-
-1️⃣ Carl - 92% confidence
-   • 90 on Hard Rock Mine
-   • Strong into Belle (67%)
-   • Safe blind pick
-   • Few counters available
-
-2️⃣ Belle - 88% confidence
-   • Strong synergy with Gus (82)
-   • 85 on current map
-
-3️⃣ Gus - 84% confidence
-   • High meta strength (88)
-   • Strong into RT (71%)
-
-[Pick Carl] [Pick Belle] [Pick Gus] [Undo] [Export]
+```bash
+railway up
 ```
 
-## Contributing
+### Self-Hosted
 
-This project is designed to be easily maintainable and extensible:
+See documentation for instructions.
 
-- Modular architecture
-- Full documentation
-- Clear separation of concerns
-- Production-ready error handling
-- Comprehensive logging
+## Development
 
-See `docs/ARCHITECTURE.md` for contribution guidelines.
+### Running Tests
 
-## License
+```bash
+pytest tests/ -v
+```
 
-MIT License - See LICENSE file
+### Running with Debug Logging
 
-## Support
+```bash
+DEBUG=1 python -m src.bot.main
+```
 
-For issues, questions, or suggestions, please open a GitHub issue.
+## Disclaimer
 
----
-
-**Built with ❤️ for the Brawl Stars competitive community**
+This bot is an unofficial Brawl Stars tool. It is not affiliated with Supercell or Brawl Stars.
